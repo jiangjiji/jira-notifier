@@ -1,0 +1,40 @@
+{
+  "name": "jira-notifier",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "events": "^3.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@eslint-react/eslint-plugin": "^1.28.0",
+    "@eslint/js": "^9.21.0",
+    "@types/chrome": "^0.0.307",
+    "@types/node": "^22.13.5",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "globals": "^15.15.0",
+    "prettier": "^3.5.2",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-packagejson": "^2.5.8",
+    "rollup-plugin-copy": "^3.5.0",
+    "sass": "^1.85.1",
+    "stylelint": "^16.14.1",
+    "stylelint-config-standard-scss": "^14.0.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0",
+    "zustand": "^5.0.3"
+  }
+}

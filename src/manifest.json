@@ -1,0 +1,14 @@
+{
+    "name": "Vite Chrome Extension",
+    "version": "1.0",
+    "manifest_version": 3, 
+    "action": {
+        "default_icon": {
+            "16": "assets/react.svg",
+            "48": "assets/react.svg",
+            "128": "assets/react.svg"
+        },
+        "default_title": "Popup",
+        "default_popup": "index.html"
+    }
+}
