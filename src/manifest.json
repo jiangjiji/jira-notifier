@@ -1,14 +1,21 @@
 {
+    "manifest_version": 3,
     "name": "JIRA 通知小工具",
     "version": "1.0",
-    "manifest_version": 3, 
+    "author": "Jiangjiji",
     "action": {
-        "default_icon": {
-            "16": "assets/react.svg",
-            "48": "assets/react.svg",
-            "128": "assets/react.svg"
-        },
-        "default_title": "Popup",
+        "default_icon": "assets/favicon.ico",
+        "default_title": "JIRA 通知小工具",
         "default_popup": "index.html"
-    }
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "options_page": "index.html",
+    "permissions": [
+        "activeTab",
+        "cookies",
+        "idle",
+        "notifications"
+    ]
 }
