@@ -1,4 +1,10 @@
-# Jira 通知扩展
+# Jira 新 Bug 提示插件
+
+- 无缝集成 Jira
+- 实时监测与提醒
+- 自定义提醒规则
+- 一键直达 Jira
+
 
 # TODO List
 

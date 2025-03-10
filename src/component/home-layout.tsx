@@ -1,5 +1,6 @@
 import { Avatar, Badge, Card } from "antd-mobile";
 import { SendOutline } from "antd-mobile-icons";
+import { useJiraStore } from "../store/jiraStore";
 import { useSettingStore } from "../store/settingStore";
 import { useInfoStore } from "../store/userStore";
 import cssStyles from "./home-layout.module.scss";
@@ -7,7 +8,7 @@ import cssStyles from "./home-layout.module.scss";
 function HomeLayout() {
   const userName = useInfoStore((state) => state.displayName);
   const userAvatar = useInfoStore((state) => state.avatarUrls?.["48x48"]);
-  console.log("🚀 ~ userAvatar:", userAvatar);
+  const issueCount = useJiraStore((state) => state.count);
 
   return (
     <div className={cssStyles.page}>
@@ -31,7 +32,7 @@ function HomeLayout() {
       <Card
         title="新BUG"
         className={cssStyles.bugCard}
-        extra={<Badge content="99+" />}
+        extra={<Badge content={issueCount} />}
       ></Card>
     </div>
   );

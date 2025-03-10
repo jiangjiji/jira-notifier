@@ -4,6 +4,7 @@ import { jiraClient } from "@/src/utils/common/jiraClient";
 import { Toast } from "antd-mobile";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { getAllUnresolvedIssues } from "./store/jiraStore";
 
 initComponent();
 initJIRA();
@@ -28,4 +29,6 @@ async function initJIRA() {
       position: "bottom",
     });
   }
+
+  getAllUnresolvedIssues();
 }
