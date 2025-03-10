@@ -1,4 +1,4 @@
-import { NavBar, TabBar } from "antd-mobile";
+import { TabBar } from "antd-mobile";
 import {
   AppstoreOutline,
   MessageOutline,
@@ -13,14 +13,13 @@ import {
   useNavigate,
 } from "react-router-dom";
 import cssStyles from "./main-layout.module.scss";
+import SettingLayout from "./setting-layout";
 
 function MainLayout() {
   return (
     <HashRouter>
       <div className={cssStyles.app}>
-        <div className={cssStyles.top}>
-          <NavBar backIcon={false}>配合路由使用</NavBar>
-        </div>
+        {/* <div className={cssStyles.top}></div> */}
         <div className={cssStyles.body}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -91,7 +90,7 @@ function Message() {
 }
 
 function Setting() {
-  return <div>设置</div>;
+  return <SettingLayout />;
 }
 
 export default MainLayout;
