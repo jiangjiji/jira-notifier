@@ -12,6 +12,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import HomeLayout from "./home-layout";
 import cssStyles from "./main-layout.module.scss";
 import SettingLayout from "./setting-layout";
 
@@ -22,10 +23,10 @@ function MainLayout() {
         {/* <div className={cssStyles.top}></div> */}
         <div className={cssStyles.body}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomeLayout />} />
             <Route path="/todo" element={<Todo />} />
             <Route path="/message" element={<Message />} />
-            <Route path="/setting" element={<Setting />} />
+            <Route path="/setting" element={<SettingLayout />} />
           </Routes>
         </div>
         <div className={cssStyles.bottom}>
@@ -77,20 +78,12 @@ function Bottom() {
   );
 }
 
-function Home() {
-  return <div>首页</div>;
-}
-
 function Todo() {
   return <div>待办</div>;
 }
 
 function Message() {
   return <div>消息</div>;
-}
-
-function Setting() {
-  return <SettingLayout />;
 }
 
 export default MainLayout;

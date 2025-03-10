@@ -1,0 +1,40 @@
+@use "common";
+
+.page {
+  @include common.page;
+}
+
+.title {
+  display: flex;
+  font-size: var(--adm-font-size-5);
+  color: var(--adm-color-text-secondary);
+  align-items: center;
+  padding: 4px;
+
+  .left {
+    flex: auto;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    .avatar {
+      --size: 24px;
+    }
+  }
+  .right {
+    flex: none;
+
+    .open {
+      font-size: 16px;
+      cursor: pointer;
+
+      :hover {
+        color: var(--adm-color-primary);
+      }
+    }
+  }
+}
+
+.bugCard {
+  margin-top: 6px;
+}
