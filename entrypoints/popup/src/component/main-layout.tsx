@@ -1,3 +1,7 @@
+import storeSync from "@/src/store/storeSync";
+import { jiraHelper } from "@/src/utils/common/jiraClient";
+import { MessageSource } from "@/src/utils/common/messageType";
+import { useAsyncEffect } from "ahooks";
 import { TabBar } from "antd-mobile";
 import {
   AppstoreOutline,
@@ -17,6 +21,18 @@ import cssStyles from "./main-layout.module.scss";
 import SettingLayout from "./setting-layout";
 
 function MainLayout() {
+  useAsyncEffect(async () => {
+    storeSync(MessageSource.Popup);
+
+    await jiraHelper.refreshUserInfo();
+    if (!jiraHelper.checkLogin()) {
+      jiraHelper.gotoLogin();
+      return;
+    }
+
+    await jiraHelper.getAllUnresolvedIssues();
+  }, []);
+
   return (
     <HashRouter>
       <div className={cssStyles.app}>

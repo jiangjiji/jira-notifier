@@ -15,6 +15,8 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
+    "ahooks": "^3.8.4",
+    "antd": "^5.24.4",
     "antd-mobile": "^5.38.1",
     "antd-mobile-icons": "^0.3.0",
     "events": "^3.3.0",
@@ -23,25 +25,30 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.2.0",
     "uuid": "^11.1.0",
-    "zustand": "^5.0.3"
+    "zustand": "^5.0.3",
+    "zustand-chrome-storage": "^1.0.0"
   },
   "devDependencies": {
     "@eslint-react/eslint-plugin": "^1.28.0",
     "@eslint/js": "^9.21.0",
-    "@types/chrome": "^0.0.280",
-    "@types/react": "^18.2.73",
+    "@types/chrome": "^0.0.310",
+    "@types/lodash-es": "^4.17.12",
+    "@types/react": "^18.3.20",
     "@types/react-dom": "^18.2.23",
     "@wxt-dev/module-react": "^1.1.2",
     "eslint": "^9.21.0",
+    "lodash-es": "^4.17.21",
     "prettier": "^3.5.2",
+    "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-packagejson": "^2.5.8",
-    "sass": "^1.85.1",
-    "stylelint": "^16.14.1",
-    "stylelint-config-clean-order": "^7.0.0",
-    "stylelint-config-standard-scss": "^14.0.0",
-    "typescript": "~5.7.2",
+    "react-scan": "^0.3.3",
+    "rollup-plugin-visualizer": "^5.14.0",
+    "sass": "^1.86.0",
+    "typescript": "^5.8.2",
     "typescript-eslint": "^8.24.1",
+    "vite-plugin-babel-import": "^2.0.5",
+    "vite-plugin-import": "^0.4.0",
     "vite-plugin-node-polyfills": "^0.23.0",
     "wxt": "^0.19.13"
   }

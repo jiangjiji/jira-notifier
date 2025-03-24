@@ -2,6 +2,7 @@
 
 .page {
   @include common.page;
+  @include common.scrollbar;
 }
 
 .title {
@@ -36,5 +37,30 @@
 }
 
 .bugCard {
-  margin-top: 6px;
+  width: 100%;
+
+  margin-top: 8px;
+  padding: 0px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+
+  .bugCardTitle {
+    height: 34px;
+    font-size: 14px;
+    font-weight: bold;
+
+    color: var(--adm-color-text);
+    padding: 4px 12px;
+
+    display: flex;
+    align-items: center;
+  }
+}
+
+.bugList {
+  height: 340px;
+  overflow: auto;
+  padding: 4px;
+  --adm-font-size-9: 14px;
 }

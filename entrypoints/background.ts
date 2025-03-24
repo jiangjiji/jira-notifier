@@ -1,19 +1,66 @@
-import { Version2Client } from "jira.js";
+import { useSettingStore } from "@/src/store/settingStore";
+import storeSync from "@/src/store/storeSync";
+import { jiraHelper } from "@/src/utils/common/jiraClient";
+import {
+  MessageAction,
+  MessageSource,
+  RuntimeMessageEvent,
+  addMessageListener,
+} from "@/src/utils/common/messageType";
 
-async function test() {
-  const clientOptions = {
-    host: "http://192.168.1.230:8080",
-  };
+const JIRA_TASK = "jira-task";
+let timerID: NodeJS.Timeout;
 
-  const jira = new Version2Client(clientOptions);
+async function taskRun() {
+  if (!jiraHelper.checkLogin()) await jiraHelper.refreshUserInfo();
 
-  const userInfo = await jira.myself.getCurrentUser();
+  if (!jiraHelper.checkLogin()) {
+    jiraHelper.gotoLogin();
+    return;
+  }
 
-  console.log(userInfo);
-  console.log(userInfo.displayName);
+  await jiraHelper.getAllUnresolvedIssues();
+}
+
+function setAlarms() {
+  browser.alarms.create(JIRA_TASK, {
+    periodInMinutes: 1,
+  });
+
+  browser.alarms.onAlarm.addListener((alarm) => {
+    console.log("🚀 ~ alarm:", alarm);
+    if (alarm.name === JIRA_TASK) taskRun();
+  });
+
+  useSettingStore.subscribe((newState, oldState) => {
+    if (newState.interval !== oldState.interval) {
+      browser.alarms.clear(JIRA_TASK);
+      browser.alarms.create(JIRA_TASK, {
+        periodInMinutes: 1,
+      });
+    }
+  });
+}
+
+function handleMessage(message: RuntimeMessageEvent) {
+  if (message.action === MessageAction.JiraViewing) {
+    if (message.isOpen) {
+      clearInterval(timerID);
+
+      timerID = setInterval(async () => {
+        if (!jiraHelper.checkLogin()) await jiraHelper.refreshUserInfo();
+      }, 1000);
+    } else {
+      clearInterval(timerID);
+    }
+  }
 }
 
 export default defineBackground(() => {
-  test();
-  console.log("Hello background!", { id: browser.runtime.id });
+  storeSync(MessageSource.BackgroundScript);
+
+  taskRun();
+  setAlarms();
+
+  addMessageListener(handleMessage);
 });

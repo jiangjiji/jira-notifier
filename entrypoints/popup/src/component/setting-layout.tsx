@@ -1,5 +1,6 @@
+import { ISettingData, useSettingStore } from "@/src/store/settingStore";
+
 import { Form, Input, Stepper, Switch } from "antd-mobile";
-import { ISettingData, useSettingStore } from "../store/settingStore";
 import cssStyle from "./setting-layout.module.scss";
 
 function SettingLayout() {
