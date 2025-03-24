@@ -1,6 +1,4 @@
-import storeSync from "@/src/store/storeSync";
 import { jiraHelper } from "@/src/utils/common/jiraClient";
-import { MessageSource } from "@/src/utils/common/messageType";
 import { useAsyncEffect } from "ahooks";
 import { TabBar } from "antd-mobile";
 import {
@@ -22,11 +20,10 @@ import SettingLayout from "./setting-layout";
 
 function MainLayout() {
   useAsyncEffect(async () => {
-    storeSync(MessageSource.Popup);
-
+    // 手动刷新一次数据
     await jiraHelper.refreshUserInfo();
     if (!jiraHelper.checkLogin()) {
-      jiraHelper.gotoLogin();
+      await jiraHelper.gotoLogin();
       return;
     }
 

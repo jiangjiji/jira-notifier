@@ -18,7 +18,7 @@ const clientOptions = {
   host: "http://192.168.1.230:8080",
 };
 
-export const jiraClient = new Version2Client(clientOptions);
+const jiraClient = new Version2Client(clientOptions);
 
 jiraClient.handleFailedResponse = (response) => {
   console.log("handleFailedResponse", response);
@@ -28,12 +28,11 @@ jiraClient.handleFailedResponse = (response) => {
 // #region 初始化JiraHelper
 class JiraHelper {
   public async gotoLogin() {
-    const tabs = await browser.tabs.query({
-      url: useSettingStore.getState().serverURL,
-    });
+    const url = useSettingStore.getState().serverURL + "/*";
+    const tabs = await browser.tabs.query({ url });
 
     if (tabs.length > 0) {
-      tabs[0].active = true;
+      browser.tabs.update(tabs[0].id!, { active: true });
     } else {
       browser.tabs.create({
         url: useSettingStore.getState().serverURL,

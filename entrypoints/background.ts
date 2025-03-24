@@ -12,10 +12,10 @@ const JIRA_TASK = "jira-task";
 let timerID: NodeJS.Timeout;
 
 async function taskRun() {
-  if (!jiraHelper.checkLogin()) await jiraHelper.refreshUserInfo();
+  if (jiraHelper.checkLogin()) await jiraHelper.refreshUserInfo();
 
   if (!jiraHelper.checkLogin()) {
-    jiraHelper.gotoLogin();
+    await jiraHelper.gotoLogin();
     return;
   }
 
@@ -56,11 +56,14 @@ function handleMessage(message: RuntimeMessageEvent) {
   }
 }
 
-export default defineBackground(() => {
-  storeSync(MessageSource.BackgroundScript);
+export default defineBackground({
+  type: "module",
+  main() {
+    storeSync(MessageSource.BackgroundScript);
 
-  taskRun();
-  setAlarms();
+    taskRun();
+    setAlarms();
 
-  addMessageListener(handleMessage);
+    addMessageListener(handleMessage);
+  },
 });

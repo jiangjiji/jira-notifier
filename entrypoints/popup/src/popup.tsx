@@ -1,5 +1,6 @@
-import storeSync, {  popupSync } from "@/src/store/storeSync";
+import storeSync, { popupSync } from "@/src/store/storeSync";
 import { jiraHelper } from "@/src/utils/common/jiraClient";
+import { MessageSource } from "@/src/utils/common/messageType";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import MainLayout from "./component/main-layout";
@@ -10,9 +11,10 @@ async function init() {
   console.log("🚀 ~ init");
 
   await popupSync();
+  storeSync(MessageSource.Popup);
 
   if (!jiraHelper.checkLogin()) {
-    jiraHelper.gotoLogin();
+    await jiraHelper.gotoLogin();
     return;
   }
 
