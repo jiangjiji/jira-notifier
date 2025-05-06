@@ -1,4 +1,4 @@
-import { User } from "jira.js/out/version2/models";
+import { Version2Models } from "jira.js";
 import { create } from "zustand";
 import { ChromeLocalStorage } from "zustand-chrome-storage";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -7,7 +7,7 @@ import { IProjectData } from "../utils/common/jiraClient";
 export interface IJiraData {
   count: number;
   isLoading: boolean;
-  userInfo: User | null;
+  userInfo: Version2Models.User | null;
   projectInfoList: IProjectData[];
 }
 

@@ -1,16 +1,16 @@
 import { useJiraStore } from "@/src/store/jiraStore";
 import { useSettingStore } from "@/src/store/settingStore";
-import { Version2Client } from "jira.js";
-import { Issue, Project } from "jira.js/out/version2/models";
+import { Version2Client, Version2Models } from "jira.js";
 
 // #region 类型定义
 export interface IProjectData {
   count: number;
-  issues: Issue[];
+  issues: Version2Models.Issue[];
   key: string;
   name: string;
   url: string;
 }
+
 // #endregion
 
 // #region 初始化JiraClient
@@ -78,10 +78,10 @@ class JiraHelper {
 
     console.log("🚀 ~ projects:", projects);
 
-    const projectIssues = new Map<string, Issue[]>();
-    const projectList = new Map<string, Project>();
+    const projectIssues = new Map<string, Version2Models.Issue[]>();
+    const projectList = new Map<string, Version2Models.Project>();
     projects.issues!.forEach((issue) => {
-      const project = issue.fields.project as Project;
+      const project = issue.fields.project as Version2Models.Project;
       if (!project.key) return;
 
       if (!projectList.has(project.key)) {

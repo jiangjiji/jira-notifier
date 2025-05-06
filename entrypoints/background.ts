@@ -1,15 +1,8 @@
 import { useSettingStore } from "@/src/store/settingStore";
-import storeSync from "@/src/store/storeSync";
 import { jiraHelper } from "@/src/utils/common/jiraClient";
-import {
-  MessageAction,
-  MessageSource,
-  RuntimeMessageEvent,
-  addMessageListener,
-} from "@/src/utils/common/messageType";
+import { defineJobScheduler } from "@webext-core/job-scheduler";
 
 const JIRA_TASK = "jira-task";
-let timerID: NodeJS.Timeout;
 
 async function taskRun() {
   if (jiraHelper.checkLogin()) await jiraHelper.refreshUserInfo();
@@ -22,48 +15,35 @@ async function taskRun() {
   await jiraHelper.getAllUnresolvedIssues();
 }
 
-function setAlarms() {
-  browser.alarms.create(JIRA_TASK, {
-    periodInMinutes: 1,
-  });
-
-  browser.alarms.onAlarm.addListener((alarm) => {
-    console.log("🚀 ~ alarm:", alarm);
-    if (alarm.name === JIRA_TASK) taskRun();
+function setJob() {
+  const jobs = defineJobScheduler();
+  jobs.scheduleJob({
+    id: "JIRA_TASK",
+    type: "interval",
+    duration: 1,
+    immediate: true,
+    execute: taskRun,
   });
 
   useSettingStore.subscribe((newState, oldState) => {
     if (newState.interval !== oldState.interval) {
-      browser.alarms.clear(JIRA_TASK);
-      browser.alarms.create(JIRA_TASK, {
-        periodInMinutes: 1,
+      jobs.removeJob(JIRA_TASK);
+
+      jobs.scheduleJob({
+        id: "JIRA_TASK",
+        type: "interval",
+        duration: 1,
+        immediate: false,
+        execute: taskRun,
       });
     }
   });
 }
 
-function handleMessage(message: RuntimeMessageEvent) {
-  if (message.action === MessageAction.JiraViewing) {
-    if (message.isOpen) {
-      clearInterval(timerID);
-
-      timerID = setInterval(async () => {
-        if (!jiraHelper.checkLogin()) await jiraHelper.refreshUserInfo();
-      }, 1000);
-    } else {
-      clearInterval(timerID);
-    }
-  }
-}
-
 export default defineBackground({
   type: "module",
   main() {
-    storeSync(MessageSource.BackgroundScript);
-
     taskRun();
-    setAlarms();
-
-    addMessageListener(handleMessage);
+    setJob();
   },
 });
