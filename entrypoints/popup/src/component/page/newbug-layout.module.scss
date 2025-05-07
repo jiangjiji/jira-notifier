@@ -1,0 +1,18 @@
+@use "../common/common";
+
+.page {
+}
+
+.bugCard {
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+.twoLineDescription {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; // 最多显示两行
+  overflow: hidden;
+  text-overflow: ellipsis; // 超出部分用省略号表示
+}

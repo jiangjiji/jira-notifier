@@ -1,10 +1,11 @@
-import { jiraHelper } from "@/src/utils/common/jiraClient";
 import { useAsyncEffect } from "ahooks";
+import { Avatar } from "antd";
 import { TabBar } from "antd-mobile";
 import {
   AppstoreOutline,
   MessageOutline,
   MoreOutline,
+  SendOutline,
   UnorderedListOutline,
 } from "antd-mobile-icons";
 import {
@@ -14,9 +15,13 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import HomeLayout from "./home-layout";
 import cssStyles from "./main-layout.module.scss";
-import SettingLayout from "./setting-layout";
+import NewBugLayout from "./page/newbug-layout";
+import SettingLayout from "./page/setting-layout";
+
+import { useJiraStore } from "@/src/store/jiraStore";
+import { useSettingStore } from "@/src/store/settingStore";
+import { jiraHelper } from "@/src/utils/common/jiraClient";
 
 function MainLayout() {
   useAsyncEffect(async () => {
@@ -28,15 +33,17 @@ function MainLayout() {
     }
 
     await jiraHelper.getAllUnresolvedIssues();
+
+    console.timeEnd("🚀 ~ init");
   }, []);
 
   return (
     <HashRouter>
       <div className={cssStyles.app}>
-        {/* <div className={cssStyles.top}></div> */}
+        <Header />
         <div className={cssStyles.body}>
           <Routes>
-            <Route path="/" element={<HomeLayout />} />
+            <Route path="/" element={<NewBugLayout />} />
             <Route path="/todo" element={<Todo />} />
             <Route path="/message" element={<Message />} />
             <Route path="/setting" element={<SettingLayout />} />
@@ -47,6 +54,32 @@ function MainLayout() {
         </div>
       </div>
     </HashRouter>
+  );
+}
+
+function Header() {
+  const userInfo = useJiraStore((state) => state.userInfo);
+
+  return (
+    <div className={cssStyles.title}>
+      <div className={cssStyles.left}>
+        <Avatar
+          className={cssStyles.avatar}
+          src={userInfo?.avatarUrls?.["48x48"] ?? ""}
+        />
+        {userInfo?.displayName}
+      </div>
+      <div
+        className={cssStyles.right}
+        title="打开Jira"
+        onClick={() => {
+          const settingData = useSettingStore.getState();
+          window.open(settingData.serverURL);
+        }}
+      >
+        <SendOutline className={cssStyles.open} />
+      </div>
+    </div>
   );
 }
 
@@ -62,7 +95,7 @@ function Bottom() {
   const tabs = [
     {
       key: "/",
-      title: "News",
+      title: "新Bug",
       icon: <AppstoreOutline />,
     },
     {

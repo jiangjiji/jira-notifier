@@ -9,6 +9,7 @@ export interface IJiraData {
   isLoading: boolean;
   userInfo: Version2Models.User | null;
   projectInfoList: IProjectData[];
+  ignoreList: string[];
 }
 
 export const useJiraStore = create<IJiraData>()(
@@ -17,6 +18,7 @@ export const useJiraStore = create<IJiraData>()(
       count: 0,
       isLoading: false,
       projectInfoList: [],
+      ignoreList: [],
       userInfo: null,
     }),
     {

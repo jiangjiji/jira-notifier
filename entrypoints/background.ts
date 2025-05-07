@@ -20,7 +20,7 @@ function setJob() {
   jobs.scheduleJob({
     id: "JIRA_TASK",
     type: "interval",
-    duration: 1,
+    duration: 1000 * useSettingStore.getState().interval,
     immediate: true,
     execute: taskRun,
   });

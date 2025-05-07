@@ -13,7 +13,7 @@ export const useSettingStore = create<ISettingData>()(
     (set, get) => ({
       isOpen: true,
       serverURL: "http://192.168.1.230:8080",
-      interval: 1,
+      interval: 60,
     }),
     {
       name: "user-setting",
