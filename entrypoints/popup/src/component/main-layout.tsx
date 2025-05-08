@@ -1,13 +1,5 @@
 import { useAsyncEffect } from "ahooks";
-import { Avatar } from "antd";
-import { TabBar } from "antd-mobile";
-import {
-  AppstoreOutline,
-  MessageOutline,
-  MoreOutline,
-  SendOutline,
-  UnorderedListOutline,
-} from "antd-mobile-icons";
+import { Avatar, Tooltip } from "antd";
 import {
   HashRouter,
   Route,
@@ -16,12 +8,14 @@ import {
   useNavigate,
 } from "react-router-dom";
 import cssStyles from "./main-layout.module.scss";
-import NewBugLayout from "./page/newbug-layout";
 import SettingLayout from "./page/setting-layout";
+
+import { LeftOutlined, SettingOutlined } from "@ant-design/icons";
 
 import { useJiraStore } from "@/src/store/jiraStore";
 import { useSettingStore } from "@/src/store/settingStore";
 import { jiraHelper } from "@/src/utils/common/jiraClient";
+import NewBugLayout from "./page/newbug-layout";
 
 function MainLayout() {
   useAsyncEffect(async () => {
@@ -33,8 +27,6 @@ function MainLayout() {
     }
 
     await jiraHelper.getAllUnresolvedIssues();
-
-    console.timeEnd("🚀 ~ init");
   }, []);
 
   return (
@@ -44,13 +36,8 @@ function MainLayout() {
         <div className={cssStyles.body}>
           <Routes>
             <Route path="/" element={<NewBugLayout />} />
-            <Route path="/todo" element={<Todo />} />
-            <Route path="/message" element={<Message />} />
             <Route path="/setting" element={<SettingLayout />} />
           </Routes>
-        </div>
-        <div className={cssStyles.bottom}>
-          <Bottom />
         </div>
       </div>
     </HashRouter>
@@ -58,78 +45,55 @@ function MainLayout() {
 }
 
 function Header() {
+  const serverURL = useSettingStore((state) => state.serverURL);
   const userInfo = useJiraStore((state) => state.userInfo);
-
-  return (
-    <div className={cssStyles.title}>
-      <div className={cssStyles.left}>
-        <Avatar
-          className={cssStyles.avatar}
-          src={userInfo?.avatarUrls?.["48x48"] ?? ""}
-        />
-        {userInfo?.displayName}
-      </div>
-      <div
-        className={cssStyles.right}
-        title="打开Jira"
-        onClick={() => {
-          const settingData = useSettingStore.getState();
-          window.open(settingData.serverURL);
-        }}
-      >
-        <SendOutline className={cssStyles.open} />
-      </div>
-    </div>
-  );
-}
-
-function Bottom() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pathname } = location;
 
-  const setRouteActive = (value: string) => {
-    navigate(value);
-  };
-
-  const tabs = [
-    {
-      key: "/",
-      title: "新Bug",
-      icon: <AppstoreOutline />,
-    },
-    {
-      key: "/todo",
-      title: "待办",
-      icon: <UnorderedListOutline />,
-    },
-    {
-      key: "/message",
-      title: "消息",
-      icon: <MessageOutline />,
-    },
-    {
-      key: "/setting",
-      title: "设置",
-      icon: <MoreOutline />,
-    },
-  ];
-
-  return (
-    <TabBar activeKey={pathname} onChange={(value) => setRouteActive(value)}>
-      {tabs.map((item) => (
-        <TabBar.Item key={item.key} icon={item.icon} title={item.title} />
-      ))}
-    </TabBar>
-  );
-}
-
-function Todo() {
-  return <div>待办</div>;
-}
-
-function Message() {
-  return <div>消息</div>;
+  if (location.pathname === "/setting") {
+    return (
+      <div
+        className={cssStyles.headerBack}
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        <div className={cssStyles.title}>
+          <LeftOutlined className={cssStyles.icon} style={{ fontSize: 16 }} />
+          返回
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className={cssStyles.header}>
+        <div className={cssStyles.left}>
+          <div className={cssStyles.title}>
+            <Avatar
+              className={cssStyles.clickable}
+              size={28}
+              src={userInfo?.avatarUrls?.["48x48"] ?? ""}
+              onClick={() => browser.tabs.create({ url: serverURL })}
+            />
+            <span
+              className={cssStyles.clickable}
+              onClick={() => browser.tabs.create({ url: serverURL })}
+            >
+              {userInfo?.displayName}
+            </span>
+          </div>
+        </div>
+        <div className={cssStyles.right}>
+          <Tooltip title="设置">
+            <SettingOutlined
+              className={cssStyles.icon}
+              onClick={() => navigate("/setting")}
+            />
+          </Tooltip>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default MainLayout;

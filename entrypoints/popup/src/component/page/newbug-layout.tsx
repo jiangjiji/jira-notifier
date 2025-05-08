@@ -1,93 +1,63 @@
 import { useJiraStore } from "@/src/store/jiraStore";
-import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
-
-import { IProjectData } from "@/src/utils/common/jiraClient";
-import { Badge, Collapse, List, Space } from "antd";
-import React from "react";
+import { useSettingStore } from "@/src/store/settingStore";
+import { List } from "antd";
+import { Version2Models } from "jira.js";
 import cssStyles from "./newbug-layout.module.scss";
 
-const IconText = (props: { icon: React.FC; text: string }) => (
-  <Space>
-    {React.createElement(props.icon)}
-    {props.text}
-  </Space>
-);
+const BugItem = (props: {
+  index: number;
+  item: Version2Models.Issue;
+  length: number;
+}) => {
+  const serverURL = useSettingStore((state) => state.serverURL);
+  const isAutoFocused = useSettingStore((state) => state.isAutoFocused);
+  const addIgnore = useJiraStore((state) => state.addIgnore);
 
-const generateItems = (projectInfoList: IProjectData[]) => {
-  return projectInfoList.map((projectInfo) => {
-    return {
-      key: projectInfo.key,
-      label: projectInfo.name,
-      extra: <Badge count={projectInfo.count} />,
-      styles: {
-        body: {
-          padding: "0 8px",
-        },
-      },
-      children: (
-        <List
-          size="small"
-          dataSource={projectInfo.issues}
-          renderItem={(item) => (
-            <List.Item
-              style={{ padding: "6px 0" }}
-              actions={[
-                <IconText
-                  icon={StarOutlined}
-                  text="156"
-                  key="list-vertical-star-o"
-                />,
-                <IconText
-                  icon={LikeOutlined}
-                  text="156"
-                  key="list-vertical-like-o"
-                />,
-                <IconText
-                  icon={MessageOutlined}
-                  text="2"
-                  key="list-vertical-message"
-                />,
-              ]}
-            >
-              {
-                <div style={{ display: "flex" }}>
-                  <div style={{ minWidth: "80px" }}>{item.key}</div>
-                  <div
-                    style={{
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 2,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                    title={item.fields.summary}
-                  >
-                    {item.fields.summary}
-                  </div>
-                </div>
-              }
-            </List.Item>
-          )}
-        />
-      ),
-    };
-  });
+  const onClick = () => {
+    addIgnore(props.item);
+
+    // 打开新的一页
+    browser.tabs.create({
+      url: `${serverURL}/browse/${props.item.key}`,
+      active: isAutoFocused,
+    });
+  };
+
+  return (
+    <div
+      className={`${cssStyles.bugItem} ${props.index === 0 && cssStyles.isFirst} ${props.index === props.length - 1 && cssStyles.isLast}`}
+      onClick={onClick}
+    >
+      <div className={cssStyles.bugTitle}>
+        <img src={props.item.fields.priority.iconUrl} />
+        <div className={cssStyles.bugKey}>{props.item.key}</div>
+      </div>
+
+      <div className={cssStyles.bugContent}>{props.item.fields.summary}</div>
+    </div>
+  );
 };
 
 function NewBugLayout() {
   const projectInfoList = useJiraStore((state) => state.projectInfoList);
+  const issuesList = projectInfoList.reduce<Version2Models.Issue[]>(
+    (acc, project) => {
+      return acc.concat(project.issues);
+    },
+    [],
+  );
 
   return (
     <div className={cssStyles.page}>
-      <div className={cssStyles.bugCard}>
-        <Collapse
-          className={cssStyles.bugList}
-          size="small"
-          expandIconPosition="end"
-          items={generateItems(projectInfoList)}
-          accordion
-        ></Collapse>
-      </div>
+      <List
+        bordered
+        dataSource={issuesList}
+        renderItem={(item, index) => (
+          <List.Item style={{ padding: 0 }}>
+            <BugItem index={index} item={item} length={issuesList.length} />
+          </List.Item>
+        )}
+      />
     </div>
   );
 }

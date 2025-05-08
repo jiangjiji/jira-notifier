@@ -2,28 +2,73 @@ import { Version2Models } from "jira.js";
 import { create } from "zustand";
 import { ChromeLocalStorage } from "zustand-chrome-storage";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { IProjectData } from "../utils/common/jiraClient";
+import { IProjectData, jiraHelper } from "../utils/common/jiraClient";
 
-export interface IJiraData {
+const STORAGE_KEY = "jira-data";
+interface IJiraData {
   count: number;
   isLoading: boolean;
   userInfo: Version2Models.User | null;
   projectInfoList: IProjectData[];
   ignoreList: string[];
+  noticedList: string[];
 }
 
-export const useJiraStore = create<IJiraData>()(
+interface IJiraActions {
+  addIgnore: (issue: Version2Models.Issue) => void;
+  clearIgnore: () => void;
+}
+
+export const useJiraStore = create<IJiraData & IJiraActions>()(
   persist(
     (set, get) => ({
       count: 0,
       isLoading: false,
       projectInfoList: [],
       ignoreList: [],
+      noticedList: [],
       userInfo: null,
+
+      addIgnore: (issue: Version2Models.Issue) => {
+        const ignoreList = structuredClone(get().ignoreList);
+        if (ignoreList.includes(issue.key)) return;
+        ignoreList.push(issue.key);
+        set({ ignoreList });
+
+        const projectInfoList = structuredClone(get().projectInfoList);
+        jiraHelper.processList(projectInfoList);
+      },
+      clearIgnore: () => {
+        set({ ignoreList: [], noticedList: [] });
+        jiraHelper.getAllUnresolvedIssues();
+      },
     }),
     {
-      name: "jira-data",
+      name: STORAGE_KEY,
       storage: createJSONStorage(() => ChromeLocalStorage),
     },
   ),
 );
+
+useJiraStore.subscribe((state, prevState) => {
+  if (state.count !== prevState.count)
+    browser.action.setBadgeText({ text: state.count.toString() });
+});
+
+if (browser) {
+  browser.storage.local.onChanged.addListener((changes) => {
+    if (changes[STORAGE_KEY]) {
+      console.log("🚀 ~ Background Storage has changed", changes[STORAGE_KEY]);
+
+      useJiraStore.persist.rehydrate();
+    }
+  });
+} else {
+  window.addEventListener("storage", (event) => {
+    if (event.key === STORAGE_KEY && event.newValue) {
+      console.log("🚀 ~ Client Storage has changed", event);
+
+      useJiraStore.persist.rehydrate();
+    }
+  });
+}

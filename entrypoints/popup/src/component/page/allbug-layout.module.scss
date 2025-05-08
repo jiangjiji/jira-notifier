@@ -1,0 +1,65 @@
+@use "../common/common";
+
+.page {
+  overflow: hidden;
+}
+
+.bugCard {
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.bugItem {
+  display: flex;
+  position: relative;
+  align-items: stretch;
+  transition: all 0.3s;
+  overflow: hidden;
+
+  &:hover {
+    .bugSummary {
+      transform: translateX(-150px);
+    }
+    .bugAction {
+      transform: translateX(-150px);
+    }
+  }
+
+  &.removing {
+    transform: translateX(100%); // 向右平移移出
+  }
+
+  .bugKey {
+    z-index: 1;
+    background-color: white;
+    padding-right: 10px;
+    text-wrap: nowrap;
+  }
+
+  .bugSummary {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    transition: all 0.3s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bugAction {
+    display: flex;
+    position: absolute;
+    left: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    transition: all 0.3s;
+    background: white;
+    padding: 0 4px;
+    height: 100%;
+
+    .actionIcon {
+      cursor: pointer;
+    }
+  }
+}
