@@ -52,15 +52,15 @@ function Header() {
 
   if (location.pathname === "/setting") {
     return (
-      <div
-        className={cssStyles.headerBack}
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        <div className={cssStyles.title}>
+      <div className={cssStyles.headerBack}>
+        <div
+          className={cssStyles.title}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           <LeftOutlined className={cssStyles.icon} style={{ fontSize: 16 }} />
-          返回
+          <span className={cssStyles.clickable}>返回</span>
         </div>
       </div>
     );

@@ -33,7 +33,7 @@ const BugItem = (props: {
         <img src={props.issue.fields.priority.iconUrl} />
         <div className={cssStyles.bugKey}>{props.issue.key}</div>
         {props.issue.fields.status.id === JIRAStatus.Reopen && (
-          <Tag color="warning"> {props.issue.fields.status.name}</Tag>
+          <Tag className={cssStyles.tag} color="warning"> {props.issue.fields.status.name}</Tag>
         )}
       </div>
 
