@@ -1,23 +1,22 @@
 import { ContentScriptContext } from "#imports";
-import { useSettingStore } from "@/src/store/settingStore";
-import { RunTimeMessage } from "@/src/utils/common/message";
+import { onMessage } from "@/src/utils/common/messageService";
+import { getBackgroundService } from "../../src/utils/common/proxyService";
 import showToast from "./content-toast";
 
 function initPage(ctx: ContentScriptContext) {
-  browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("🚀 ~ sender:", sender);
-    console.log("🚀 ~ message:", message);
-    switch (message.type as RunTimeMessage) {
-      case RunTimeMessage.ShowToast:
-        showToast(ctx, message.message, message.description);
-        break;
-    }
-    sendResponse(RunTimeMessage.ResponseSuccess);
+  onMessage("showToast", (message) => {
+    showToast(ctx, message.data.title, message.data.description);
   });
 }
 
-function checkLogin(ctx: ContentScriptContext) {
-  const url = useSettingStore.getState().serverURL;
+async function checkLogin(ctx: ContentScriptContext) {
+  const service = getBackgroundService();
+  const jiraStore = await service.getJiraStore();
+  const settingStore = await service.getSettingStore();
+
+  const isLogin = jiraStore.isLogin;
+  if (isLogin) return;
+  const url = settingStore.serverURL;
   if (!window.location.href.includes(url)) return;
 
   showToast(ctx, "Jira 未登录", "登录后，自动获取最新的Jira内容");

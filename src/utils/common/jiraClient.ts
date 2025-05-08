@@ -1,12 +1,13 @@
 import { useJiraStore } from "@/src/store/jiraStore";
 import { NotificationType, useSettingStore } from "@/src/store/settingStore";
 import { Version2Client, Version2Models } from "jira.js";
-import { RunTimeMessage } from "./message";
+import { getBackgroundService } from "./proxyService";
 
 export enum JIRAStatus {
   None = "1",
   Start = "3",
   Reopen = "4",
+  Investigating = "5",
 }
 
 // #region 类型定义
@@ -48,7 +49,7 @@ class JiraHelper {
   }
 
   public checkLogin() {
-    return useJiraStore.getState().isLoading;
+    return useJiraStore.getState().isLogin;
   }
 
   public async refreshUserInfo() {
@@ -56,19 +57,19 @@ class JiraHelper {
 
     if (userInfo) {
       useJiraStore.setState({
-        isLoading: true,
+        isLogin: true,
         userInfo,
       });
     } else {
       useJiraStore.setState({
-        isLoading: false,
+        isLogin: false,
         userInfo: null,
       });
     }
   }
 
   public async getAllUnresolvedIssues() {
-    const projects = await jiraClient.issueSearch.searchForIssuesUsingJql({
+    const respondList = await jiraClient.issueSearch.searchForIssuesUsingJql({
       jql: "resolution = Unresolved AND assignee in (currentUser())",
       fields: [
         "summary",
@@ -82,11 +83,11 @@ class JiraHelper {
       maxResults: 1000,
     });
 
-    console.log("🚀 ~ projects:", projects);
+    console.log("🚀 ~ projects:", respondList);
 
     const projectIssues = new Map<string, Version2Models.Issue[]>();
     const projectList = new Map<string, Version2Models.Project>();
-    projects.issues!.forEach((issue) => {
+    respondList.issues!.forEach((issue) => {
       const project = issue.fields.project as Version2Models.Project;
       if (!project.key) return;
 
@@ -117,7 +118,7 @@ class JiraHelper {
       projectInfoList.push(info);
     }
 
-    this.processList(projectInfoList);
+    this.processList(projectInfoList, respondList.issues);
   }
 
   public async setIssuesStatus(issueKey: string, status: JIRAStatus) {
@@ -136,10 +137,27 @@ class JiraHelper {
     }
   }
 
-  public processList(projectInfoList: IProjectData[]) {
-    const { ignoreList, noticedList } = useJiraStore.getState();
+  public processList(
+    projectInfoList: IProjectData[],
+    issuesList?: Version2Models.Issue[],
+  ) {
+    const { ignoreList: prevIgnoreList, noticedList: prevNoticeList } =
+      useJiraStore.getState();
     const needNoticeList = new Array<Version2Models.Issue>();
 
+    let ignoreList = prevIgnoreList;
+    let noticedList = prevNoticeList;
+    //如果是重新拉取的话 把已经处理的bug 就移出掉
+    if (issuesList) {
+      ignoreList = prevIgnoreList.filter((ignore) => {
+        return issuesList.some((issue) => issue.key === ignore);
+      });
+      noticedList = prevNoticeList.filter((notice) => {
+        return issuesList.some((issue) => issue.key === notice);
+      });
+    }
+
+    // 已经忽略的就 不要显示了
     projectInfoList.forEach((project) => {
       project.issues = project.issues.filter(
         (issue) => !ignoreList.includes(issue.key),
@@ -151,22 +169,45 @@ class JiraHelper {
 
     const count = projectInfoList.reduce((acc, cur) => acc + cur.count, 0);
 
+    // 提取未通知的
+    let newCount = 0;
+    let reopenCount = 0;
     projectInfoList.forEach((project) => {
       project.issues.forEach((issue) => {
         if (noticedList.includes(issue.key)) return;
+
+        if (issue.fields.status.id === JIRAStatus.None) newCount++;
+        else reopenCount++;
+
         noticedList.push(issue.key);
         needNoticeList.push(issue);
       });
     });
 
-    this.noticeIssues(needNoticeList);
-    useJiraStore.setState({ count, projectInfoList, noticedList });
+    this.noticeIssues(needNoticeList, newCount, reopenCount);
+
+    useJiraStore.setState({
+      count,
+      projectInfoList,
+      ignoreList,
+      noticedList,
+    });
   }
 
-  public noticeIssues(list: Version2Models.Issue[]) {
+  public noticeIssues(
+    list: Version2Models.Issue[],
+    newCount: number,
+    reopenCount: number,
+  ) {
     if (list.length === 0) return;
     const { notifyType } = useSettingStore.getState();
-    const title = `新增了${list.length}个bug，请及时查看！`;
+
+    const parts = [];
+    if (newCount > 0) parts.push(`新增${newCount}个Bug`);
+    if (reopenCount > 0) parts.push(`重新打开${reopenCount}个Bug`);
+    parts.push("请及时查看！");
+
+    const title = parts.join("，");
     const message = `${list[0].key} ${list[0].fields.summary}`;
 
     switch (notifyType) {
@@ -174,7 +215,7 @@ class JiraHelper {
         return;
       case NotificationType.System:
         browser.notifications.create({
-          iconUrl: "wxt.svg",
+          iconUrl: "icon.svg",
           type: "basic",
           title,
           message,
@@ -188,11 +229,7 @@ class JiraHelper {
         });
         break;
       case NotificationType.InterBrowser:
-        browser.runtime.sendMessage({
-          type: RunTimeMessage.ShowToast,
-          message: title,
-          description: message,
-        });
+        getBackgroundService().showToast(title, message);
         break;
     }
   }

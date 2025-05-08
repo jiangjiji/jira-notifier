@@ -7,7 +7,7 @@ import { IProjectData, jiraHelper } from "../utils/common/jiraClient";
 const STORAGE_KEY = "jira-data";
 interface IJiraData {
   count: number;
-  isLoading: boolean;
+  isLogin: boolean;
   userInfo: Version2Models.User | null;
   projectInfoList: IProjectData[];
   ignoreList: string[];
@@ -23,7 +23,7 @@ export const useJiraStore = create<IJiraData & IJiraActions>()(
   persist(
     (set, get) => ({
       count: 0,
-      isLoading: false,
+      isLogin: false,
       projectInfoList: [],
       ignoreList: [],
       noticedList: [],

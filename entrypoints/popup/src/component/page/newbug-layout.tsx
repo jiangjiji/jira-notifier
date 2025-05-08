@@ -1,12 +1,13 @@
 import { useJiraStore } from "@/src/store/jiraStore";
 import { useSettingStore } from "@/src/store/settingStore";
-import { List } from "antd";
+import { JIRAStatus } from "@/src/utils/common/jiraClient";
+import { List, Tag } from "antd";
 import { Version2Models } from "jira.js";
 import cssStyles from "./newbug-layout.module.scss";
 
 const BugItem = (props: {
   index: number;
-  item: Version2Models.Issue;
+  issue: Version2Models.Issue;
   length: number;
 }) => {
   const serverURL = useSettingStore((state) => state.serverURL);
@@ -14,11 +15,11 @@ const BugItem = (props: {
   const addIgnore = useJiraStore((state) => state.addIgnore);
 
   const onClick = () => {
-    addIgnore(props.item);
+    addIgnore(props.issue);
 
     // 打开新的一页
     browser.tabs.create({
-      url: `${serverURL}/browse/${props.item.key}`,
+      url: `${serverURL}/browse/${props.issue.key}`,
       active: isAutoFocused,
     });
   };
@@ -29,11 +30,14 @@ const BugItem = (props: {
       onClick={onClick}
     >
       <div className={cssStyles.bugTitle}>
-        <img src={props.item.fields.priority.iconUrl} />
-        <div className={cssStyles.bugKey}>{props.item.key}</div>
+        <img src={props.issue.fields.priority.iconUrl} />
+        <div className={cssStyles.bugKey}>{props.issue.key}</div>
+        {props.issue.fields.status.id === JIRAStatus.Reopen && (
+          <Tag color="warning"> {props.issue.fields.status.name}</Tag>
+        )}
       </div>
 
-      <div className={cssStyles.bugContent}>{props.item.fields.summary}</div>
+      <div className={cssStyles.bugContent}>{props.issue.fields.summary}</div>
     </div>
   );
 };
@@ -54,7 +58,7 @@ function NewBugLayout() {
         dataSource={issuesList}
         renderItem={(item, index) => (
           <List.Item style={{ padding: 0 }}>
-            <BugItem index={index} item={item} length={issuesList.length} />
+            <BugItem index={index} issue={item} length={issuesList.length} />
           </List.Item>
         )}
       />

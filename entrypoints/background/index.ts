@@ -1,7 +1,7 @@
 import { useSettingStore } from "@/src/store/settingStore";
 import { jiraHelper } from "@/src/utils/common/jiraClient";
-import { RunTimeMessage } from "@/src/utils/common/message";
 import { defineJobScheduler } from "@webext-core/job-scheduler";
+import { registerBackgroundService } from "../../src/utils/common/proxyService";
 
 const JIRA_TASK = "jira-task";
 
@@ -48,6 +48,8 @@ function setJob() {
 function initBackground() {
   console.log("🚀 ~ initBackground:");
 
+  registerBackgroundService();
+
   // TODO
   browser.notifications.onClicked.addListener(() => {
     console.log("🚀 ~ browser.notifications.onClicked:");
@@ -62,28 +64,6 @@ function initBackground() {
       url: useSettingStore.getState().serverURL,
     });
   });
-
-  browser.runtime.onMessage.addListener(
-    async (message, sender, sendResponse) => {
-      console.log("🚀 ~ sender:", sender);
-      console.log("🚀 ~ message:", message);
-
-      const tabs = await browser.tabs.query({});
-
-      switch (message.type as RunTimeMessage) {
-        case RunTimeMessage.ShowToast:
-          tabs.forEach((tab) => {
-            if (tab.id) {
-              // 向内容脚本发送消息
-              browser.tabs.sendMessage(tab.id, message);
-            }
-          });
-          break;
-      }
-
-      sendResponse(RunTimeMessage.ResponseSuccess);
-    },
-  );
 }
 
 export default defineBackground({

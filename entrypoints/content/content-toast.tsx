@@ -5,10 +5,14 @@ import ReactDOM from "react-dom/client";
 function ContentToast(props: {
   title: string;
   description: string;
-  onClick: () => void;
+  onClick?: () => void;
 }) {
+  const iconPath = browser.runtime.getURL("/icon.svg");
+
+  console.log("🚀 ~ iconPath:", iconPath);
   useEffect(() => {
     notification.open({
+      icon: <img style={{ height: 26, width: 26 }} src={iconPath} />,
       message: props.title,
       description: props.description,
       onClick: props.onClick,
