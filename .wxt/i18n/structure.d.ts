@@ -5,6 +5,8 @@ export type GeneratedI18nStructure = {
   "noLoginContent": { substitutions: 0, plural: false };
   "back": { substitutions: 0, plural: false };
   "setting": { substitutions: 0, plural: false };
+  "noLogin": { substitutions: 0, plural: false };
+  "login": { substitutions: 0, plural: false };
   "server": { substitutions: 0, plural: false };
   "serverRequired": { substitutions: 0, plural: false };
   "serverPlaceholder": { substitutions: 0, plural: false };

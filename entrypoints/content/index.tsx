@@ -11,13 +11,15 @@ function initPage(ctx: ContentScriptContext) {
 
 async function checkLogin(ctx: ContentScriptContext) {
   const service = getBackgroundService();
-  const jiraStore = await service.getJiraStore();
-  const settingStore = await service.getSettingStore();
 
-  const isLogin = jiraStore.isLogin;
-  if (isLogin) return;
+  const settingStore = await service.getSettingStore();
   const url = settingStore.serverURL;
   if (!window.location.href.includes(url)) return;
+
+  await service.refreshUserInfo();
+  const jiraStore = await service.getJiraStore();
+  const isLogin = jiraStore.isLogin;
+  if (isLogin) return;
 
   showToast(ctx, i18n.t("noLoginTitle"), i18n.t("noLoginContent"));
 }

@@ -15,18 +15,14 @@ import { LeftOutlined, SettingOutlined } from "@ant-design/icons";
 import { useJiraStore } from "@/src/store/jiraStore";
 import { useSettingStore } from "@/src/store/settingStore";
 import { jiraHelper } from "@/src/utils/common/jiraClient";
+import LoginLayout from "./page/login-layout";
 import NewBugLayout from "./page/newbug-layout";
 
 function MainLayout() {
   useAsyncEffect(async () => {
     // 手动刷新一次数据
     await jiraHelper.refreshUserInfo();
-    if (!jiraHelper.checkLogin()) {
-      await jiraHelper.gotoLogin();
-      return;
-    }
-
-    await jiraHelper.getAllUnresolvedIssues();
+    if (jiraHelper.checkLogin()) await jiraHelper.getAllUnresolvedIssues();
   }, []);
 
   return (
@@ -37,6 +33,7 @@ function MainLayout() {
           <Routes>
             <Route path="/" element={<NewBugLayout />} />
             <Route path="/setting" element={<SettingLayout />} />
+            <Route path="/login" element={<LoginLayout />} />
           </Routes>
         </div>
       </div>
@@ -45,10 +42,16 @@ function MainLayout() {
 }
 
 function Header() {
+  const isLogin = useJiraStore((state) => state.isLogin);
   const serverURL = useSettingStore((state) => state.serverURL);
   const userInfo = useJiraStore((state) => state.userInfo);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    if (!isLogin) navigate("/login");
+    else if (location.pathname === "/login") navigate("/");
+  }, [isLogin]);
 
   if (location.pathname === "/setting") {
     return (
@@ -61,6 +64,22 @@ function Header() {
         >
           <LeftOutlined className={cssStyles.icon} style={{ fontSize: 16 }} />
           <span className={cssStyles.clickable}>{i18n.t("back")} </span>
+        </div>
+      </div>
+    );
+  } else if (location.pathname === "/login") {
+    return (
+      <div className={cssStyles.header}>
+        <div className={cssStyles.left}>
+          <div className={cssStyles.title}>
+            <img className={cssStyles.logo} src="/icon.svg" alt="" />
+            <span>{i18n.t("noLogin")}</span>
+          </div>
+        </div>
+        <div className={cssStyles.right}>
+          <Tooltip title={i18n.t("setting")}>
+            <SettingOutlined className={cssStyles.icon} />
+          </Tooltip>
         </div>
       </div>
     );

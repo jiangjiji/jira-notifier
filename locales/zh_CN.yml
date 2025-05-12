@@ -7,6 +7,9 @@ noLoginContent: 登录后，自动获取最新的Jira内容
 # Popup 页面
 back: 返回
 setting: 设置
+noLogin: 未登录
+login: 登录
+
 # 设置页面
 server: 服务器
 serverRequired: 服务器地址不能为空

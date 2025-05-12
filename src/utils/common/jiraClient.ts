@@ -65,6 +65,7 @@ class JiraHelper {
       useJiraStore.setState({
         isLogin: false,
         userInfo: null,
+        count: 0,
       });
     }
   }

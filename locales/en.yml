@@ -6,6 +6,8 @@ noLoginContent: After logging in, automatically get the latest content in Jira
 
 back: Back
 setting: Settings
+noLogin: Not logged in
+login: Login
 
 server: Server
 serverRequired: The server address cannot be empty
