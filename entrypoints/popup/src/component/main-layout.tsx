@@ -60,7 +60,7 @@ function Header() {
           }}
         >
           <LeftOutlined className={cssStyles.icon} style={{ fontSize: 16 }} />
-          <span className={cssStyles.clickable}>返回</span>
+          <span className={cssStyles.clickable}>{i18n.t("back")} </span>
         </div>
       </div>
     );
@@ -84,7 +84,7 @@ function Header() {
           </div>
         </div>
         <div className={cssStyles.right}>
-          <Tooltip title="设置">
+          <Tooltip title={i18n.t("setting")}>
             <SettingOutlined
               className={cssStyles.icon}
               onClick={() => navigate("/setting")}

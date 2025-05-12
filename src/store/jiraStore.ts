@@ -55,6 +55,7 @@ useJiraStore.subscribe((state, prevState) => {
     browser.action.setBadgeText({ text: state.count.toString() });
 });
 
+// TODO 触发了两次有待调查
 if (browser) {
   browser.storage.local.onChanged.addListener((changes) => {
     if (changes[STORAGE_KEY]) {

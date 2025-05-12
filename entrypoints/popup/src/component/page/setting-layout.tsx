@@ -50,18 +50,29 @@ function SettingLayout() {
           },
         }}
       >
-        <Form form={form} className={cssStyle.form} initialValues={settingData}>
+        <Form
+          form={form}
+          className={cssStyle.form}
+          initialValues={settingData}
+        >
           <Form.Item
             name="serverURL"
-            label="服务器"
-            rules={[{ required: true, message: "服务器不能为空" }]}
+            label={i18n.t("server")}
+            rules={[{ required: true, message: i18n.t("serverRequired") }]}
           >
-            <Input onChange={console.log} placeholder="请输Jira 服务器地址" />
+            <Input
+              onChange={console.log}
+              placeholder={i18n.t("serverPlaceholder")}
+            />
           </Form.Item>
-          <Form.Item name="isOpen" label="定时检测" valuePropName="checked">
+          <Form.Item
+            name="isOpen"
+            label={i18n.t("openCheck")}
+            valuePropName="checked"
+          >
             <Switch />
           </Form.Item>
-          <Form.Item name="interval" label="检测间隔">
+          <Form.Item name="interval" label={i18n.t("interval")}>
             <div style={{ display: "flex" }}>
               <Form.Item name="interval" noStyle>
                 <Slider
@@ -83,18 +94,22 @@ function SettingLayout() {
               </Form.Item>
             </div>
           </Form.Item>
-          <Form.Item name="notifyType" label="通知方式">
+          <Form.Item name="notifyType" label={i18n.t("notifyType")}>
             <Radio.Group>
-              <Radio.Button value={NotificationType.None}>不通知</Radio.Button>
-              <Radio.Button value={NotificationType.InterBrowser}>
-                浏览器
+              <Radio.Button value={NotificationType.None}>
+                {i18n.t("notifyTypeNone")}
               </Radio.Button>
-              <Radio.Button value={NotificationType.System}>系统</Radio.Button>
+              <Radio.Button value={NotificationType.InterBrowser}>
+                {i18n.t("notifyTypeBrowser")}
+              </Radio.Button>
+              <Radio.Button value={NotificationType.System}>
+                {i18n.t("notifyTypeSystem")}
+              </Radio.Button>
             </Radio.Group>
           </Form.Item>
           <Form.Item
             name="isAutoFocused"
-            label="直接跳转"
+            label={i18n.t("gotoJira")}
             valuePropName="checked"
           >
             <Switch />
@@ -107,7 +122,7 @@ function SettingLayout() {
         icon={<DeleteFilled />}
         onClick={() => clearIgnore()}
       >
-        重置数据
+        {i18n.t("reset")}
       </Button>
     </div>
   );

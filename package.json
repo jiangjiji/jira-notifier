@@ -1,6 +1,6 @@
 {
   "name": "jira-notifier",
-  "description": "jira 提示检查工具",
+  "description": "Jira 提示检查工具",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -19,17 +19,18 @@
     "@webext-core/job-scheduler": "^1.0.0",
     "@webext-core/messaging": "^2.2.0",
     "@webext-core/proxy-service": "^1.2.1",
+    "@wxt-dev/i18n": "^0.2.4",
     "ahooks": "^3.8.4",
     "antd": "^5.24.4",
     "events": "^3.3.0",
     "jira.js": "^5.0.0",
+    "lodash-es": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.2.0",
     "uuid": "^11.1.0",
     "zustand": "^5.0.3",
-    "zustand-chrome-storage": "^1.0.0",
-    "lodash-es": "^4.17.21"
+    "zustand-chrome-storage": "^1.0.0"
   },
   "devDependencies": {
     "@eslint-react/eslint-plugin": "^1.28.0",

@@ -1,3 +1,4 @@
+import { i18n } from "#imports";
 import { useJiraStore } from "@/src/store/jiraStore";
 import { NotificationType, useSettingStore } from "@/src/store/settingStore";
 import { Version2Client, Version2Models } from "jira.js";
@@ -203,9 +204,9 @@ class JiraHelper {
     const { notifyType } = useSettingStore.getState();
 
     const parts = [];
-    if (newCount > 0) parts.push(`新增${newCount}个Bug`);
-    if (reopenCount > 0) parts.push(`重新打开${reopenCount}个Bug`);
-    parts.push("请及时查看！");
+    if (newCount > 0) parts.push(i18n.t("noticeNewCount", newCount));
+    if (reopenCount > 0) parts.push(i18n.t("noticeReopenCount", reopenCount));
+    parts.push(i18n.t("noticeDes"));
 
     const title = parts.join("，");
     const message = `${list[0].key} ${list[0].fields.summary}`;
@@ -221,7 +222,7 @@ class JiraHelper {
           message,
           buttons: [
             {
-              title: "查看",
+              title: i18n.t("noticeBtn"),
             },
           ],
           requireInteraction: true,

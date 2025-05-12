@@ -50,7 +50,7 @@ function initBackground() {
 
   registerBackgroundService();
 
-  // TODO
+  // TODO 没有触发事件
   browser.notifications.onClicked.addListener(() => {
     console.log("🚀 ~ browser.notifications.onClicked:");
     browser.tabs.create({

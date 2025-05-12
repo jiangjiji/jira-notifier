@@ -41,6 +41,7 @@ const globals = {
   "defineUnlistedScript": true,
   "defineWxtPlugin": true,
   "fakeBrowser": true,
+  "i18n": true,
   "injectScript": true,
   "storage": true,
   "useAppConfig": true,

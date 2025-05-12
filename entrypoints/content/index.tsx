@@ -1,4 +1,4 @@
-import { ContentScriptContext } from "#imports";
+import { ContentScriptContext, i18n } from "#imports";
 import { onMessage } from "@/src/utils/common/messageService";
 import { getBackgroundService } from "../../src/utils/common/proxyService";
 import showToast from "./content-toast";
@@ -19,7 +19,7 @@ async function checkLogin(ctx: ContentScriptContext) {
   const url = settingStore.serverURL;
   if (!window.location.href.includes(url)) return;
 
-  showToast(ctx, "Jira 未登录", "登录后，自动获取最新的Jira内容");
+  showToast(ctx, i18n.t("noLoginTitle"), i18n.t("noLoginContent"));
 }
 
 export default defineContentScript({

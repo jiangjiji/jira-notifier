@@ -1,0 +1,29 @@
+extName: Jira Notifier
+extDescription: A tool for getting new Bug notifications in Jira
+
+noLoginTitle: Not logged in to Jira
+noLoginContent: After logging in, automatically get the latest content in Jira
+
+back: Back
+setting: Settings
+
+server: Server
+serverRequired: The server address cannot be empty
+serverPlaceholder: Please enter the Jira server address
+openCheck: Open detection
+interval: Detection interval
+notifyType: Notification
+notifyTypeNone: Silent
+notifyTypeBrowser: Browser
+notifyTypeSystem: System
+gotoJira: Directly jump
+reset: Reset data
+
+noticeNewCount:
+  1: 1 new Bug
+  n: $1 new Bugs
+noticeReopenCount:
+  1: 1 Bug has been reopened
+  n: $1 Bugs have been reopened
+noticeDes: Please check!
+noticeBtn: Check

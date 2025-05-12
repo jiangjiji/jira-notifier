@@ -1,0 +1,31 @@
+extName: Jira Notifier
+extDescription: Jira 新增Bug提示工具
+# 内容页面
+noLoginTitle: Jira 未登录
+noLoginContent: 登录后，自动获取最新的Jira内容
+
+# Popup 页面
+back: 返回
+setting: 设置
+# 设置页面
+server: 服务器
+serverRequired: 服务器地址不能为空
+serverPlaceholder: 请输Jira 服务器地址
+openCheck: 开启检测
+interval: 检测间隔
+notifyType: 通知方式
+notifyTypeNone: 不通知
+notifyTypeBrowser: 浏览器
+notifyTypeSystem: 系统
+gotoJira: 直接跳转
+reset: 重置数据
+
+# Background
+noticeNewCount:
+  1: 新增1个Bug
+  n: 新增$1个Bug
+noticeReopenCount:
+  1: 重新打开1个Bug
+  n: 重新打开$1个Bug
+noticeDes: 请及时查看！
+noticeBtn: 查看
