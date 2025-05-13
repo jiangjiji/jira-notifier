@@ -1,5 +1,8 @@
 # Jira 新 Bug 提示插件
 
+![封面给](https://github.com/jiangjiji/jira-notifier/blob/main/doc/img/cover.png?raw=true)
+
+
 ### 无缝集成 Jira
 自动检测登录信息，无需手动输入账号。  
 
