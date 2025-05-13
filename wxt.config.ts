@@ -4,11 +4,11 @@ import { defineConfig } from "wxt";
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/i18n/module"],
   manifest: {
-    default_locale: "en",
+    default_locale: "zh_CN",
     name: "__MSG_extName__",
     description: "__MSG_extDescription__",
 
-    permissions: ["notifications", "tabs", "storage", "alarms"],
+    permissions: ["notifications", "storage", "alarms"],
     host_permissions: ["<all_urls>"],
     web_accessible_resources: [
       {
