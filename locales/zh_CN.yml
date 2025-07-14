@@ -22,6 +22,7 @@ notifyTypeBrowser: 浏览器
 notifyTypeSystem: 系统
 gotoJira: 直接跳转
 reset: 重置数据
+ignoreAll: 忽略所有
 
 # Background
 noticeNewCount:

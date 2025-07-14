@@ -20,6 +20,7 @@ notifyTypeBrowser: Browser
 notifyTypeSystem: System
 gotoJira: Directly jump
 reset: Reset data
+ignoreAll: Ignore all
 
 noticeNewCount:
   1: 1 new Bug

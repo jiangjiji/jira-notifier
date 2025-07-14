@@ -17,6 +17,7 @@ interface IJiraData {
 
 interface IJiraActions {
   addIgnore: (issue: Version2Models.Issue) => void;
+  ignoreAll: () => void;
   clearIgnore: () => void;
 }
 
@@ -43,6 +44,14 @@ export const useJiraStore = create<IJiraData & IJiraActions>()(
       clearIgnore: () => {
         set({ ignoreList: [], noticedList: [] });
         jiraHelper.getAllUnresolvedIssues();
+      },
+      ignoreAll: () => {
+        const allIssues = get().projectInfoList.flatMap((item) => item.issues);
+        const ignoreList = allIssues.map((item) => item.key);
+        set({ ignoreList });
+
+        const projectInfoList = structuredClone(get().projectInfoList);
+        jiraHelper.processList(projectInfoList);
       },
     }),
     {

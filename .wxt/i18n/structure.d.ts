@@ -18,6 +18,7 @@ export type GeneratedI18nStructure = {
   "notifyTypeSystem": { substitutions: 0, plural: false };
   "gotoJira": { substitutions: 0, plural: false };
   "reset": { substitutions: 0, plural: false };
+  "ignoreAll": { substitutions: 0, plural: false };
   "noticeNewCount": { substitutions: 1, plural: true };
   "noticeReopenCount": { substitutions: 1, plural: true };
   "noticeDes": { substitutions: 0, plural: false };

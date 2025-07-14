@@ -14,6 +14,7 @@ import {
   InputNumber,
   Radio,
   Slider,
+  Space,
   Switch,
 } from "antd";
 import cssStyle from "./setting-layout.module.scss";
@@ -21,6 +22,7 @@ import cssStyle from "./setting-layout.module.scss";
 function SettingLayout() {
   const settingData = useSettingStore((state) => state);
   const clearIgnore = useJiraStore((state) => state.clearIgnore);
+  const ignoreAll = useJiraStore((state) => state.ignoreAll);
 
   const [form] = Form.useForm<ISettingData>();
   const isOpen = Form.useWatch("isOpen", form);
@@ -50,11 +52,7 @@ function SettingLayout() {
           },
         }}
       >
-        <Form
-          form={form}
-          className={cssStyle.form}
-          initialValues={settingData}
-        >
+        <Form form={form} className={cssStyle.form} initialValues={settingData}>
           <Form.Item
             name="serverURL"
             label={i18n.t("server")}
@@ -117,13 +115,19 @@ function SettingLayout() {
         </Form>
       </ConfigProvider>
 
-      <Button
-        type="primary"
-        icon={<DeleteFilled />}
-        onClick={() => clearIgnore()}
-      >
-        {i18n.t("reset")}
-      </Button>
+      <Space>
+        <Button type="primary" onClick={() => ignoreAll()}>
+          {i18n.t("ignoreAll")}
+        </Button>
+
+        <Button
+          type="primary"
+          icon={<DeleteFilled />}
+          onClick={() => clearIgnore()}
+        >
+          {i18n.t("reset")}
+        </Button>
+      </Space>
     </div>
   );
 }
