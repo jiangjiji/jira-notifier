@@ -70,7 +70,6 @@ export default defineBackground({
   type: "module",
   main() {
     initBackground();
-    taskRun();
     setJob();
   },
 });

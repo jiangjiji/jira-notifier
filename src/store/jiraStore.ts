@@ -8,6 +8,7 @@ const STORAGE_KEY = "jira-data";
 interface IJiraData {
   count: number;
   isLogin: boolean;
+  isOffLine: boolean;
   userInfo: Version2Models.User | null;
   projectInfoList: IProjectData[];
   ignoreList: string[];
@@ -24,6 +25,7 @@ export const useJiraStore = create<IJiraData & IJiraActions>()(
     (set, get) => ({
       count: 0,
       isLogin: false,
+      isOffLine: false,
       projectInfoList: [],
       ignoreList: [],
       noticedList: [],

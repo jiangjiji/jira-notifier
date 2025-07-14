@@ -30,13 +30,25 @@ const clientOptions = {
 const jiraClient = new Version2Client(clientOptions);
 
 jiraClient.handleFailedResponse = (response) => {
+  if (response.code === "ERR_NETWORK")
+    useJiraStore.setState({ isOffLine: true });
+
   console.log("handleFailedResponse", response);
 };
+
+jiraClient.handleSuccessResponse = (response) => {
+  useJiraStore.setState({ isOffLine: false });
+  return response;
+};
+
 // #endregion
 
 // #region 初始化JiraHelper
 class JiraHelper {
   public async gotoLogin() {
+    const isOffLine = useJiraStore.getState().isOffLine;
+    if (isOffLine) return;
+
     const url = useSettingStore.getState().serverURL + "/*";
     const tabs = await browser.tabs.query({ url });
 
