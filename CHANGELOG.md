@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/jiangjiji/jira-notifier/compare/v1.1.0...v1.2.0) (2025-07-14)
+
+
+### Features
+
+* 优化避乱断网时，重复打开 ([c7f48ac](https://github.com/jiangjiji/jira-notifier/commit/c7f48acbdf6aeeee20ff6e65e3a235bad324a677))
+* 增加忽略所有 ([5defcf7](https://github.com/jiangjiji/jira-notifier/commit/5defcf7154398f9ca676d925c745e767b81428b3))
+
 ## 1.1.0 (2025-05-13)
 
 
