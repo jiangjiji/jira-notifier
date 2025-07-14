@@ -28,7 +28,7 @@ importers:
         version: 3.9.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       antd:
         specifier: ^5.26.4
-        version: 5.26.4(luxon@3.7.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 5.26.4(luxon@3.7.1)(moment@2.23.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       events:
         specifier: ^3.3.0
         version: 3.3.0
@@ -2552,6 +2552,9 @@ packages:
     resolution: {integrity: sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==}
     engines: {node: '>=0.10.0'}
 
+  moment@2.23.0:
+    resolution: {integrity: sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==}
+
   ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
 
@@ -4923,7 +4926,7 @@ snapshots:
 
   ansi-styles@6.2.1: {}
 
-  antd@5.26.4(luxon@3.7.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  antd@5.26.4(luxon@3.7.1)(moment@2.23.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       '@ant-design/colors': 7.2.1
       '@ant-design/cssinjs': 1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -4955,7 +4958,7 @@ snapshots:
       rc-motion: 2.9.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       rc-notification: 5.6.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       rc-pagination: 5.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      rc-picker: 4.11.3(dayjs@1.11.13)(luxon@3.7.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      rc-picker: 4.11.3(dayjs@1.11.13)(luxon@3.7.1)(moment@2.23.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       rc-progress: 4.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       rc-rate: 2.13.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       rc-resize-observer: 1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -6514,6 +6517,9 @@ snapshots:
 
   modify-values@1.0.1: {}
 
+  moment@2.23.0:
+    optional: true
+
   ms@2.0.0: {}
 
   ms@2.1.3: {}
@@ -7058,7 +7064,7 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  rc-picker@4.11.3(dayjs@1.11.13)(luxon@3.7.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  rc-picker@4.11.3(dayjs@1.11.13)(luxon@3.7.1)(moment@2.23.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       '@babel/runtime': 7.27.6
       '@rc-component/trigger': 2.2.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -7071,6 +7077,7 @@ snapshots:
     optionalDependencies:
       dayjs: 1.11.13
       luxon: 3.7.1
+      moment: 2.23.0
 
   rc-progress@4.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
